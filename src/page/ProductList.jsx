@@ -136,7 +136,7 @@ const ProductList = () => {
                                                 onClick={() => onDelete(p.id)}
                                                 className="text-sm px-3 py-1 rounded bg-red-500 hover:bg-red-600 text-white"
                                             >
-                                                Delete
+                                                Delete tes
                                             </button>
                                         </div>
                                     </td>
