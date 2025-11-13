@@ -8,6 +8,7 @@ import EditProduct from './page/EditProduct.jsx';
 import Transaksi from './page/Transaksi.jsx';
 import Header from './component/Header.jsx';
 import Riwayat from './page/Riwayat.jsx';
+import Pendapatan from './page/Pendapatan.jsx';
 function App() {
   return(
     <BrowserRouter>
@@ -18,6 +19,7 @@ function App() {
         <Route path="/add" element={<AddProduct />} />
         <Route path="/edit/:id" element={<EditProduct />} />
         <Route path="/riwayat" element={<Riwayat />} />
+        <Route path="/pendapatan" element={<Pendapatan />} />
       </Routes>
       <Toast />
       <Confirm />

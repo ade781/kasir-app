@@ -8,6 +8,7 @@ const Header = () => {
             <button onClick={() => navigate("/")}>Kasir</button>
             <button onClick={() => navigate("/list")}>Daftar Produk</button>
             <button onClick={() => navigate("/riwayat")}>Riwayat Transaksi</button>
+            <button onClick={() => navigate("/pendapatan")}>Pendapatan</button>
         </header>
     );
 };
