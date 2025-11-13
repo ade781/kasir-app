@@ -1,4 +1,3 @@
-// ScanSelector.jsx
 import { useState } from "react";
 import ScannerInput from "./ScannerInput";
 import CameraScanner from "./CameraScanner";

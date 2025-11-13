@@ -1,17 +1,17 @@
-// ...existing code...
 import React, { useEffect, useRef, useState } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
 
 const CameraScanner = ({ onScan }) => {
   const videoRef = useRef(null);
   const readerRef = useRef(null);
+  const streamRef = useRef(null);
   const [devices, setDevices] = useState([]);
   const [selectedDevice, setSelectedDevice] = useState("");
   const lastResultTimeRef = useRef(0);
-  const [viewActive, setViewActive] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   // milliseconds to allow repeating same code
-  const MIN_REPEAT_MS = 600; // tune this (e.g. 300-800ms)
+  const MIN_REPEAT_MS = 600;
 
   useEffect(() => {
     readerRef.current = new BrowserMultiFormatReader();
@@ -19,13 +19,15 @@ const CameraScanner = ({ onScan }) => {
 
     (async () => {
       try {
+        // minta permission agar device label muncul dan kamera siap
+        await navigator.mediaDevices.getUserMedia({ video: true }).catch(() => {});
         const list = await navigator.mediaDevices.enumerateDevices();
         if (!mounted) return;
         const cams = list.filter((d) => d.kind === "videoinput");
         setDevices(cams);
         if (cams.length && !selectedDevice) setSelectedDevice(cams[0].deviceId);
       } catch (err) {
-        console.error("enumerateDevices error:", err);
+        console.error("enumerateDevices / getUserMedia error:", err);
       }
     })();
 
@@ -36,29 +38,63 @@ const CameraScanner = ({ onScan }) => {
   }, []); // run once
 
   useEffect(() => {
+    // start/replace decoding whenever selectedDevice changes
     const reader = readerRef.current;
-    if (!reader || !selectedDevice || !videoRef.current || !viewActive) return;
+    const videoEl = videoRef.current;
+    if (!reader || !selectedDevice) return;
 
-    // ensure previous decode stopped
-    try { reader.reset(); } catch (e) {}
+    let active = true;
 
-    reader.decodeFromVideoDevice(selectedDevice, videoRef.current, (result, err) => {
-      if (result) {
-        const text = result.getText();
-        const now = Date.now();
-        // accept repeated scans if time since last accepted scan > MIN_REPEAT_MS
-        if (text && now - lastResultTimeRef.current > MIN_REPEAT_MS) {
-          lastResultTimeRef.current = now;
-          onScan && onScan(text);
+    const start = async () => {
+      try {
+        // stop previous
+        try { reader.reset(); } catch (e) {}
+        if (streamRef.current) {
+          streamRef.current.getTracks()?.forEach((t) => t.stop());
+          streamRef.current = null;
         }
+
+        // open stream explicitly so permission is ensured and we can attach to video (even hidden)
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { deviceId: { exact: selectedDevice } },
+          audio: false,
+        });
+        streamRef.current = stream;
+        if (videoEl) {
+          videoEl.srcObject = stream;
+          // keep video muted & inline to allow autoplay in renderer
+          videoEl.muted = true;
+          videoEl.playsInline = true;
+          await videoEl.play().catch(() => {});
+        }
+
+        reader.decodeFromVideoDevice(selectedDevice, videoEl, (result, err) => {
+          if (!active) return;
+          if (result) {
+            const text = result.getText();
+            const now = Date.now();
+            if (text && now - lastResultTimeRef.current > MIN_REPEAT_MS) {
+              lastResultTimeRef.current = now;
+              onScan && onScan(text);
+            }
+          }
+        });
+      } catch (err) {
+        console.error("start camera error:", err);
       }
-      // ignore NotFoundException etc.
-    });
+    };
+
+    start();
 
     return () => {
-      try { reader.reset(); } catch (e) { console.warn("reader.reset failed", e); }
+      active = false;
+      try { reader.reset(); } catch (e) {}
+      if (streamRef.current) {
+        streamRef.current.getTracks()?.forEach((t) => t.stop());
+        streamRef.current = null;
+      }
     };
-  }, [selectedDevice, viewActive, onScan]);
+  }, [selectedDevice, onScan]);
 
   return (
     <div>
@@ -76,24 +112,25 @@ const CameraScanner = ({ onScan }) => {
         </select>
         <button
           className="ml-2 px-3 py-1 bg-gray-200 rounded"
-          onClick={() => {
-            setViewActive((v) => !v);
-            lastResultTimeRef.current = 0; // reset timer saat toggle
-          }}
+          onClick={() => setShowPreview((v) => !v)}
         >
-          {viewActive ? "Sembunyikan" : "Tampilkan"} pratinjau
+          {showPreview ? "Sembunyikan" : "Tampilkan"} pratinjau
         </button>
       </div>
 
       <div>
-        {viewActive && <video ref={videoRef} className="w-full max-w-xs h-auto border rounded" />}
+        {/* video tetap disertakan di DOM untuk memberikan frame ke decoder.
+            Preview hanya di-toggle via CSS visibility sehingga decoding tetap jalan. */}
+        <video
+          ref={videoRef}
+          className={`w-full max-w-xs h-auto border rounded ${showPreview ? "" : "hidden"}`}
+        />
         <div className="text-xs text-gray-500 mt-2">
-          Pastikan izin kamera diberikan. Untuk DroidCam: jalankan DroidCam di HP & PC, pilih device yang muncul.
+          Izin kamera dibutuhkan. DroidCam muncul sebagai device bila aktif di PC.
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default CameraScanner;
-// ...existing code...
