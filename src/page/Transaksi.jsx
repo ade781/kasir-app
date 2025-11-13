@@ -85,6 +85,23 @@ const Transaksi = () => {
         toast({ type: "success", title: "Ditambahkan", message: `${product.name} ditambahkan ke keranjang` });
     };
 
+    // handler untuk menerima kode dari scanner/camera
+    const handleScannedCode = async (code) => {
+        if (!code) return;
+        try {
+            const prod = await window.api.products.byBarcode(String(code).trim());
+            if (!prod) {
+                toast({ type: "error", title: "Tidak ditemukan", message: `Kode ${code} tidak ditemukan` });
+                return;
+            }
+            // pakai addToCart yang sudah ada
+            addToCart(prod);
+        } catch (err) {
+            console.error("scan error:", err);
+            toast({ type: "error", title: "Error", message: err?.message || "Gagal memproses scan" });
+        }
+    };
+
     const removeFromCart = (id) => setCart((c) => c.filter((x) => x.id !== id));
 
     const changeQty = (id, next) => {
@@ -177,7 +194,7 @@ const Transaksi = () => {
                 </div>
 
                 <div className="bg-white shadow rounded p-3">
-                    <ScanSelector />
+                    <ScanSelector onScan={handleScannedCode} />
                     <div className="mb-4">
                         <div className="text-sm text-gray-500">Subtotal</div>
                         <div className="text-xl font-semibold">Rp{subtotal.toLocaleString("id-ID")}</div>
@@ -193,7 +210,7 @@ const Transaksi = () => {
                     </div>
                     <div className="mb-4">
                         <div className="text-sm text-gray-500">Kembalian</div>
-                        <div className="text-xl font-semibold">Rp{Number(paid)-total >= 0? (Number(paid) - total).toLocaleString("id-ID") : 0}</div>
+                        <div className="text-xl font-semibold">Rp{Number(paid) - total >= 0 ? (Number(paid) - total).toLocaleString("id-ID") : 0}</div>
                     </div>
                     <div className="flex gap-2">
                         <button onClick={openConfirmModal} className="flex-1 bg-green-600 text-white px-3 py-2 rounded">Checkout</button>
@@ -218,7 +235,7 @@ const Transaksi = () => {
                         <p className="mb-4">Apakah Anda yakin ingin melanjutkan checkout?</p>
                         <div className="flex justify-end gap-2">
                             <button onClick={closeConfirmModal} className="px-4 py-2 bg-gray-200 rounded">Batal</button>
-                            <button onClick={() => { closeConfirmModal(); onCheckout(); }} className="px-4 py-2 bg-green-600 text-white rounded">Ya, Checkout</button>
+                            <button onClick={() => { closeConfirmModal(); onCheckout(); setPaid("0");}} className="px-4 py-2 bg-green-600 text-white rounded">Ya, Checkout</button>
                         </div>
                     </div>
                 </div>
