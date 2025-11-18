@@ -6,12 +6,12 @@ function registerProductIpc() {
 
   ipcMain.handle("products:list", async () => {
     const products = await Product.findAll({ order: [["name", "ASC"]] });
-    return products.map((p)=> p.get({plain: true}) );
+    return products.map((p) => p.get({ plain: true }));
   });
 
   ipcMain.handle("products:add", async (_e, p) => {
     // Validasi sederhana
-    const name  = (p?.name || "").toString().trim();
+    const name = (p?.name || "").toString().trim();
     const price = Number.isFinite(+p?.price) ? +p.price : 0;
     const stock = Number.isFinite(+p?.stock) ? +p.stock : 0;
 
