@@ -7,10 +7,13 @@ const Header = () => {
         }`;
 
     return (
-        <header className="bg-gray-800 text-white">
-            <nav className="flex justify-between items-center px-3 py-4 ">
-                <h1 className="text-xl font-bold">Kasir App</h1>
-                <div className="flex gap-4">
+        <header className="bg-gray-800 text-white shadow-md sticky top-0 z-50">
+            <nav className="flex justify-between items-center px-4 py-3">
+                <div className="flex items-center gap-2">
+                    <h1 className="text-xl font-bold tracking-wide">Kasir App</h1>
+                </div>
+
+                <div className="flex gap-1 overflow-x-auto">
                     <NavLink to="/" className={navLinkClass} end>
                         Kasir
                     </NavLink>
@@ -18,10 +21,14 @@ const Header = () => {
                         Daftar Produk
                     </NavLink>
                     <NavLink to="/riwayat" className={navLinkClass}>
-                        Riwayat Transaksi
+                        Riwayat
                     </NavLink>
                     <NavLink to="/pendapatan" className={navLinkClass}>
                         Pendapatan
+                    </NavLink>
+                    {/* Menu Baru */}
+                    <NavLink to="/pengeluaran" className={navLinkClass}>
+                        Pengeluaran
                     </NavLink>
                 </div>
             </nav>
