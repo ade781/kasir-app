@@ -17,7 +17,11 @@ async function initDatabase() {
   const Sale = require("./models/Sale")(sequelize, DataTypes);
   const SaleItem = require("./models/SaleItem")(sequelize, DataTypes);
 
-  // Relations
+  // --- Model Baru ---
+  const Supplier = require("./models/Supplier")(sequelize, DataTypes);
+  const Expense = require("./models/Expense")(sequelize, DataTypes);
+
+  // Relations Sales
   Sale.hasMany(SaleItem, {
     foreignKey: "saleId",
     onDelete: "CASCADE",
@@ -28,9 +32,14 @@ async function initDatabase() {
   Product.hasMany(SaleItem, { foreignKey: "productId" });
   SaleItem.belongsTo(Product, { foreignKey: "productId" });
 
+  // Relations Expenses
+  // Satu Toko bisa punya banyak catatan pengeluaran
+  Supplier.hasMany(Expense, { foreignKey: "supplierId" });
+  Expense.belongsTo(Supplier, { foreignKey: "supplierId" });
+
   await sequelize.sync();
 
-  models = { Product, Sale, SaleItem };
+  models = { Product, Sale, SaleItem, Supplier, Expense };
   return { sequelize, ...models };
 }
 

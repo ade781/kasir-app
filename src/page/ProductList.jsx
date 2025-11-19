@@ -68,14 +68,14 @@ const ProductList = () => {
     return (
         <div className="min-h-screen bg-gray-50/50 flex flex-col font-sans text-gray-800">
             {/* --- Header --- */}
-            <div className="bg-white border-b border-gray-100 px-8 py-5 sticky top-0 z-20 flex justify-between items-center shadow-sm">
+            <div className="bg-white border-b border-gray-100 px-8 py-4 sticky top-0 z-20 flex justify-between items-center shadow-sm">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Inventaris</h1>
-                    <p className="text-sm text-gray-500 mt-1">Kelola stok dan harga produk Anda</p>
+                    <h1 className="text-xl font-bold text-gray-900 tracking-tight">Inventaris</h1>
+                    <p className="text-xs text-gray-500 mt-0.5">Kelola stok dan harga produk Anda</p>
                 </div>
                 <button
                     onClick={onAdd}
-                    className="group flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl shadow-lg shadow-blue-100 transition-all active:scale-95 font-medium text-sm"
+                    className="group flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg shadow-blue-100 transition-all active:scale-95 font-medium text-sm"
                 >
                     <IconPlus />
                     <span>Produk Baru</span>
@@ -83,10 +83,10 @@ const ProductList = () => {
             </div>
 
             {/* --- Content --- */}
-            <div className="flex-1 p-8 max-w-[1600px] mx-auto w-full">
+            <div className="flex-1 p-6 max-w-[1600px] mx-auto w-full">
 
                 {/* Search Bar */}
-                <div className="mb-8 flex justify-center">
+                <div className="mb-6 flex justify-center">
                     <div className="relative w-full max-w-lg group">
                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
                             <IconSearch />
@@ -95,7 +95,7 @@ const ProductList = () => {
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             placeholder="Cari nama produk, barcode, atau SKU..."
-                            className="w-full pl-11 pr-10 py-3.5 bg-white border border-gray-200 rounded-2xl shadow-sm text-gray-700 placeholder:text-gray-400 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+                            className="w-full pl-11 pr-10 py-2.5 bg-white border border-gray-200 rounded-xl shadow-sm text-sm text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                         />
                         {query && (
                             <button
@@ -109,29 +109,31 @@ const ProductList = () => {
                 </div>
 
                 {/* Product Table */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="min-w-full table-auto">
                             <thead>
                                 <tr className="bg-white border-b border-gray-100">
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider w-16">#</th>
-                                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Info Produk</th>
-                                    <th className="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">Harga Jual</th>
-                                    <th className="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">Stok</th>
-                                    <th className="px-6 py-4 text-center text-xs font-bold text-gray-400 uppercase tracking-wider w-32">Aksi</th>
+                                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider w-12">#</th>
+                                    {/* Kolom Baru: Kode */}
+                                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider w-32">Kode</th>
+                                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Nama Produk</th>
+                                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">Harga Jual</th>
+                                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">Stok</th>
+                                    <th className="px-6 py-3 text-center text-xs font-bold text-gray-400 uppercase tracking-wider w-24">Aksi</th>
                                 </tr>
                             </thead>
 
                             <tbody className="divide-y divide-gray-50">
                                 {loading ? (
                                     <tr>
-                                        <td colSpan="5" className="px-6 py-16 text-center text-gray-400 animate-pulse">
+                                        <td colSpan="6" className="px-6 py-16 text-center text-gray-400 animate-pulse">
                                             Memuat data produk...
                                         </td>
                                     </tr>
                                 ) : filtered.length === 0 ? (
                                     <tr>
-                                        <td colSpan="5" className="px-6 py-20 text-center">
+                                        <td colSpan="6" className="px-6 py-20 text-center">
                                             <div className="flex flex-col items-center justify-center text-gray-400">
                                                 <IconEmpty />
                                                 <p className="mt-4 font-medium text-gray-500">Tidak ada produk ditemukan</p>
@@ -143,38 +145,34 @@ const ProductList = () => {
                                     filtered.map((p, idx) => (
                                         <tr key={p.id} className="group hover:bg-blue-50/30 transition-colors">
                                             {/* Index */}
-                                            <td className="px-6 py-4 text-sm text-gray-400 font-mono">
+                                            <td className="px-6 py-3 text-sm text-gray-400 font-mono align-middle">
                                                 {idx + 1}
                                             </td>
 
-                                            {/* Info Produk (Kontras Tinggi) */}
-                                            <td className="px-6 py-4">
-                                                <div className="flex flex-col gap-1.5">
-                                                    <span className="text-base font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
-                                                        {p.name}
-                                                    </span>
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200 font-mono tracking-wide">
-                                                            {p.barcode || "NO-CODE"}
-                                                        </span>
-                                                        {/* Anda bisa menambahkan kategori/brand di sini nanti */}
-                                                    </div>
-                                                </div>
+                                            {/* Kode / Barcode (Moved Here) */}
+                                            <td className="px-6 py-3 align-middle">
+                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-gray-100 text-gray-600 border border-gray-200 font-mono tracking-wide">
+                                                    {p.barcode || "-"}
+                                                </span>
                                             </td>
 
-                                            {/* Harga (Rapi) */}
-                                            <td className="px-6 py-4 text-right">
-                                                <div className="flex flex-col items-end gap-0.5">
-                                                    <span className="text-sm font-bold text-gray-900">
-                                                        Rp{Number(p.price || 0).toLocaleString("id-ID")}
-                                                    </span>
-
-                                                </div>
+                                            {/* Nama Produk (Clean) */}
+                                            <td className="px-6 py-3 align-middle">
+                                                <span className="text-sm font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
+                                                    {p.name}
+                                                </span>
                                             </td>
 
-                                            {/* Stok (Badge style) */}
-                                            <td className="px-6 py-4 text-right">
-                                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${Number(p.stock) <= 5
+                                            {/* Harga */}
+                                            <td className="px-6 py-3 text-right align-middle">
+                                                <span className="text-sm font-bold text-gray-900">
+                                                    Rp{Number(p.price || 0).toLocaleString("id-ID")}
+                                                </span>
+                                            </td>
+
+                                            {/* Stok */}
+                                            <td className="px-6 py-3 text-right align-middle">
+                                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${Number(p.stock) <= 5
                                                     ? 'bg-red-50 text-red-700 border-red-100'
                                                     : 'bg-green-50 text-green-700 border-green-100'
                                                     }`}>
@@ -182,19 +180,19 @@ const ProductList = () => {
                                                 </span>
                                             </td>
 
-                                            {/* Aksi (Clean Buttons) */}
-                                            <td className="px-6 py-4 text-center">
+                                            {/* Aksi */}
+                                            <td className="px-6 py-3 text-center align-middle">
                                                 <div className="flex items-center justify-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
                                                     <button
                                                         onClick={() => onEdit(p.id)}
-                                                        className="p-2 text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors border border-amber-100"
+                                                        className="p-1.5 text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-md transition-colors border border-amber-100"
                                                         title="Edit Produk"
                                                     >
                                                         <IconEdit />
                                                     </button>
                                                     <button
                                                         onClick={() => onDelete(p.id)}
-                                                        className="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-100"
+                                                        className="p-1.5 text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition-colors border border-red-100"
                                                         title="Hapus Produk"
                                                     >
                                                         <IconTrash />
@@ -209,7 +207,7 @@ const ProductList = () => {
                     </div>
 
                     {/* Table Footer */}
-                    <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-between items-center text-xs font-medium text-gray-500">
+                    <div className="bg-gray-50 px-6 py-3 border-t border-gray-200 flex justify-between items-center text-xs font-medium text-gray-500">
                         <span>Total Inventaris: {products.length} Item</span>
                         <span>Menampilkan {filtered.length} hasil</span>
                     </div>

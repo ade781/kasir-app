@@ -9,8 +9,10 @@ import Transaksi from './page/Transaksi.jsx';
 import Header from './component/Header.jsx';
 import Riwayat from './page/Riwayat.jsx';
 import Pendapatan from './page/Pendapatan.jsx';
+import Pengeluaran from './page/Pengeluaran.jsx'; // Import Page Baru
+
 function App() {
-  return(
+  return (
     <BrowserRouter>
       <Header />
       <Routes>
@@ -20,6 +22,8 @@ function App() {
         <Route path="/edit/:id" element={<EditProduct />} />
         <Route path="/riwayat" element={<Riwayat />} />
         <Route path="/pendapatan" element={<Pendapatan />} />
+        {/* Route Baru */}
+        <Route path="/pengeluaran" element={<Pengeluaran />} />
       </Routes>
       <Toast />
       <Confirm />

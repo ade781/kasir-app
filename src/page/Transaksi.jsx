@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../stores/useToast";
 import ScanSelector from "../component/ScanSelector";
+import CurrencyInput from "../component/CurrencyInput"; // Add import
 
 // --- Komponen Ikon Sederhana (Inline) ---
 const IconBack = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
@@ -265,13 +266,12 @@ const Transaksi = () => {
                                     <label className="block text-sm font-medium text-gray-600 mb-2">Uang Diterima</label>
                                     <div className="relative">
                                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">Rp</span>
-                                        <input
+                                        {/* Ganti input biasa dengan CurrencyInput */}
+                                        <CurrencyInput
                                             className="w-full pl-12 pr-4 py-3 text-xl font-bold text-gray-800 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all"
-                                            type="number"
                                             value={paid}
-                                            onChange={(e) => setPaid(e.target.value)}
+                                            onChange={setPaid}
                                             placeholder="0"
-                                            min={0}
                                         />
                                     </div>
                                 </div>
