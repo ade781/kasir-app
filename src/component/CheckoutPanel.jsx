@@ -71,10 +71,15 @@ const CheckoutPanel = ({
                         <div>
                             <label className="block text-sm font-semibold text-gray-600 mb-2 ml-1">
                                 Uang Diterima (Cash)
+                                {/* Hint Visual Shortcut */}
+                                <span className="text-xs text-gray-400 font-normal ml-2 bg-gray-100 px-2 py-0.5 rounded border border-gray-200">
+                                    Tekan ' \ '
+                                </span>
                             </label>
                             <div className="relative group">
                                 <IconMoney />
                                 <CurrencyInput
+                                    id="input-payment" // <--- ID PENTING UNTUK SHORTCUT
                                     className="w-full pl-10 pr-4 py-3.5 text-xl font-bold text-gray-800 border-2 border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all placeholder:text-gray-300"
                                     value={paid}
                                     onChange={onPaidChange}
@@ -101,25 +106,32 @@ const CheckoutPanel = ({
                     <div className="grid grid-cols-3 gap-3 mt-auto pt-4 border-t border-gray-100">
                         <button
                             onClick={onReset}
-                            className="col-span-1 py-3.5 px-4 rounded-xl font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 hover:text-gray-700 active:bg-gray-300 transition-colors flex items-center justify-center gap-2 group"
-                            title="Reset Transaksi"
+                            title="Shortcut: Spasi"
+                            className="col-span-1 py-3.5 px-4 rounded-xl font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 hover:text-gray-700 active:bg-gray-300 transition-colors flex flex-col items-center justify-center gap-1 group"
                         >
-                            <svg className="w-5 h-5 group-hover:-rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                            Reset
+                            <div className="flex items-center gap-2">
+                                <svg className="w-5 h-5 group-hover:-rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                <span>Reset</span>
+                            </div>
+                            <span className="text-[10px] font-normal opacity-60">(Spasi)</span>
                         </button>
 
                         <button
                             onClick={onCheckout}
                             disabled={!canCheckout}
+                            title="Shortcut: Enter"
                             className={`
-                                col-span-2 py-3.5 px-6 rounded-xl font-bold text-lg text-white shadow-lg flex items-center justify-center gap-2 transition-all
+                                col-span-2 py-3.5 px-6 rounded-xl font-bold text-lg text-white shadow-lg flex flex-col items-center justify-center gap-0.5 transition-all
                                 ${!canCheckout
                                     ? 'bg-gray-300 cursor-not-allowed shadow-none'
                                     : 'bg-gray-900 hover:bg-black hover:shadow-xl active:scale-[0.98] active:shadow-sm'}
                             `}
                         >
-                            <span>Bayar & Cetak</span>
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+                            <div className="flex items-center gap-2">
+                                <span>Bayar & Cetak</span>
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+                            </div>
+                            {canCheckout && <span className="text-[10px] font-normal opacity-80 text-blue-200">(Enter)</span>}
                         </button>
                     </div>
                 </div>
