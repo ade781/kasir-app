@@ -79,7 +79,7 @@ const CheckoutPanel = ({
                             <div className="relative group">
                                 <IconMoney />
                                 <CurrencyInput
-                                    id="input-payment" // <--- ID PENTING UNTUK SHORTCUT
+                                    id="input-payment" // ID untuk shortcut
                                     className="w-full pl-10 pr-4 py-3.5 text-xl font-bold text-gray-800 border-2 border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all placeholder:text-gray-300"
                                     value={paid}
                                     onChange={onPaidChange}
